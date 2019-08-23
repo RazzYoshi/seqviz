@@ -75,7 +75,7 @@ const findBindingSites = (primers = [], vectorSeq, direction) => {
   const primerBindingSites = [];
   const forward = direction === "FORWARD";
 
-  primers.forEach(primer => {
+  primers.forEach((primer, i) => {
     const { overhang = "" } = primer;
     let { sequence, strict } = primer;
     strict = strict || false;
@@ -84,7 +84,12 @@ const findBindingSites = (primers = [], vectorSeq, direction) => {
     }
     sequence = sequence.toLowerCase();
     const sequenceLength = sequence.length;
-
+    console.log(`BINDING CHECK PRIMERSEQ${i}: `, sequence);
+    console.log(
+      `BINDING ${
+        sequenceLength >= 10 ? "CHECK" : "FAIL"
+      } PRIMERSEQ${i} length ${sequenceLength} greater than or equal to 10`
+    );
     const vectorSequence = vectorSeq.toLowerCase();
     const vectorLength = vectorSequence.length;
 
@@ -100,6 +105,11 @@ const findBindingSites = (primers = [], vectorSeq, direction) => {
         : sequence.substring(sequenceLength - matchLength, sequenceLength);
 
     matchSeq = forward ? matchSeq : reverse(matchSeq);
+    console.log(
+      `BINDING ${
+        matchSeq.length >= 10 ? "CHECK" : "FAIL"
+      } PRIMERMATCHSEQ${i} ${matchSeq} length greater than or equal to 10`
+    );
 
     const regex = new RegExp(matchSeq, "gi");
     let result = regex.exec(expandedVectorSequence);
@@ -135,7 +145,25 @@ const findBindingSites = (primers = [], vectorSeq, direction) => {
         subVector = forward ? subVector : reverse(subVector);
 
         const matchTm = calcTm(sequence, subVector);
-
+        console.log(
+          `BINDING ${
+            matchTm >= primer.tm || matchTm > minTm ? "CHECK" : "FAIL"
+          } SUBVECTOR${i} ${subVector} has Tm ${matchTm} greater than or equal to ${
+            primer.tm
+          } or greater than ${minTm}`
+        );
+        console.log(
+          `BINDING ${
+            (forward && endIndex < vectorLength) || startIndex < vectorLength
+              ? "CHECK"
+              : "FAIL"
+          } SUBVECTOR${i} has correct directionality`
+        );
+        console.log(
+          `BINDING ${
+            result.index < vectorLength ? "CHECK" : "FAIL"
+          } SUBVECTOR${i} has index within vector length`
+        );
         if (
           (matchTm >= primer.tm || matchTm > minTm) &&
           ((forward && endIndex < vectorLength) || startIndex < vectorLength) &&
@@ -165,7 +193,9 @@ const findBindingSites = (primers = [], vectorSeq, direction) => {
               subVector
             ));
           }
-
+          console.log(
+            `BINDING CHECK MISMATCHES${i} ${mismatches}, ANNEALING${i} ${annealSequence}`
+          );
           const uniqMismatch = {};
           mismatches = mismatches
             .sort((a, b) => a.start < b.start)
@@ -182,7 +212,11 @@ const findBindingSites = (primers = [], vectorSeq, direction) => {
               return true;
             })
             .map(m => ({ start: m.start, end: m.end }));
-
+          console.log(
+            `BINDING CHECK ${strict} should be false, BINDING COUNT AT ITERATION ${i} is ${
+              primerBindingSites.length
+            }`
+          );
           if ((strict && mismatches.length < 1) || !strict) {
             primerBindingSites.push({
               ...primer,
@@ -212,9 +246,12 @@ const findBindingSites = (primers = [], vectorSeq, direction) => {
  */
 export const findAllBindingSites = (primers, vector) => {
   const { seq: vectorSeq, compSeq: vectorComp } = dnaComplement(vector);
-  return findBindingSites(primers, vectorSeq, "FORWARD").concat(
+
+  const bindings = findBindingSites(primers, vectorSeq, "FORWARD").concat(
     findBindingSites(primers, vectorComp, "REVERSE")
   );
+  console.log("BINDINGS FINAL: ", primers, bindings);
+  return bindings;
 };
 
 export default findAllBindingSites;
