@@ -270,7 +270,9 @@ class Circular extends React.PureComponent {
       outerLabels
     } = this.state;
 
-    const { getRotation, generateArc, findCoor, rotateCoor } = this;
+    console.log("PRIMERS SEQVIZ: ", primersInRows);
+
+      const { getRotation, generateArc, findCoor, rotateCoor } = this;
 
     // general values/functions used in many/all children
     const general = {

@@ -5,13 +5,7 @@ import PUC from "./DefaultParts/pUC";
  * CODE TO TEST VIEWER
  */
 // import "./index.css";
-// const parts = [
-//   "KJ668651.1",
-//   "BBa_E0040",
-//   PUC,
-//   "ATCGAAAAATTTTTGGGGGCCCCCAAAAAGGGGGGAAAATCGAAAAATTTTTGGGGGCCCCCAAAAAGGGGGGAAAATCGAAAAATTTTTGGGGGCCCCCAAAAAGGGGGGAAAATCGAAAAATTTTTGGGGGCCCCCAAAAAGGGGGGAAAATCGAAAAATTTTTGGGGGCCCCCAAAAAGGGGGGAAAATCGAAAAATTTTTGGGGGCCCCCAAAAAGGGGGGAAAATCGAAAAATTTTTGGGGGCCCCCAAAAAGGGGGGAAAATCGAAAAATTTTTGGGGGCCCCCAAAAAGGGGGGAAA",
-//   ""
-// ];
+// const parts = ["KJ668651.1", "BBa_E0040", PUC];
 // const part = parts[Math.floor(Math.random() * parts.length)];
 
 // const types = ["circular", "linear", "both"];
@@ -32,8 +26,8 @@ import PUC from "./DefaultParts/pUC";
 // //const part = parts[localStorage.getItem("iteration") % parts.length];
 // const type = types[localStorage.getItem("iteration") % types.length];
 
-// const annotate = false;
-// const annotations = true;
+// const annotate = true;
+// const annotations = false;
 // const primers = true;
 // const complement = true;
 // const index = true;
@@ -75,58 +69,58 @@ import PUC from "./DefaultParts/pUC";
 /**
  * CODE TO TEST VIEWER WITH FILE IMPORT
  */
-// import "./index.css";
-// import ReactDOM from "react-dom";
-// import React from "react";
-// const handleFileUpload = files => {
-//   const type = "both";
-//   const annotate = false;
-//   const annotations = true;
-//   const primers = true;
-//   const complement = true;
-//   const index = true;
-//   console.log(type);
-//   const viewer = VIEWER("app-root", files, {
-//     annotate: annotate,
-//     viewer: type,
-//     showComplement: complement,
-//     showIndex: index,
-//     showAnnotations: annotations,
-//     showPrimers: primers,
-//     zoom: { circular: 0, linear: 50 },
-//     colors: [],
-//     onSelection: selection => {
-//       console.log("Your Selection: ", selection);
-//     },
-//     onSearch: results => {
-//       console.log("Your Search Results: ", results);
-//     },
-//     searchNext: {
-//       key: "a",
-//       meta: false,
-//       ctrl: false,
-//       shift: false,
-//       alt: false
-//     },
-//     copySeq: {
-//       key: "c",
-//       meta: true,
-//       ctrl: false,
-//       shift: false,
-//       alt: false
-//     },
-//     searchQuery: { query: "attcc", mismatch: 1 },
-//     backbone: "pSB1C3",
-//     enzymes: []
-//   });
-//   viewer.render();
-// };
-// ReactDOM.render(
-//   <input
-//     type="file"
-//     id="input"
-//     multiple
-//     onChange={e => handleFileUpload(e.target.files)}
-//   />,
-//   document.getElementById("app-root")
-// );
+import "./index.css";
+import ReactDOM from "react-dom";
+import React from "react";
+const handleFileUpload = files => {
+  const type = "both";
+  const annotate = false;
+  const annotations = true;
+  const primers = true;
+  const complement = true;
+  const index = true;
+  console.log(type);
+  const viewer = VIEWER("app-root", files, {
+    annotate: annotate,
+    viewer: type,
+    showComplement: complement,
+    showIndex: index,
+    showAnnotations: annotations,
+    showPrimers: primers,
+    zoom: { circular: 0, linear: 50 },
+    colors: [],
+    onSelection: selection => {
+      console.log("Your Selection: ", selection);
+    },
+    onSearch: results => {
+      console.log("Your Search Results: ", results);
+    },
+    searchNext: {
+      key: "a",
+      meta: false,
+      ctrl: false,
+      shift: false,
+      alt: false
+    },
+    copySeq: {
+      key: "c",
+      meta: true,
+      ctrl: false,
+      shift: false,
+      alt: false
+    },
+    searchQuery: { query: "attcc", mismatch: 1 },
+    backbone: "pSB1C3",
+    enzymes: []
+  });
+  viewer.render();
+};
+ReactDOM.render(
+  <input
+    type="file"
+    id="input"
+    multiple
+    onChange={e => handleFileUpload(e.target.files)}
+  />,
+  document.getElementById("app-root")
+);

@@ -194,16 +194,14 @@ class PartExplorer extends React.Component {
     }
   };
 
-  lambdaAnnotate = async part => {
+  lambdaPost = async (endpoint, data) => {
+    const endpointRoot = "https://microservices.latticeautomation.com";
     const result = await new Promise((resolve, reject) => {
       request.post(
         {
-          uri:
-            "https://u7a3t8zeo8.execute-api.us-east-1.amazonaws.com/prod/annotate",
+          uri: `${endpointRoot}/${endpoint}`,
           method: "POST",
-          json: JSON.stringify({
-            part: { id: shortid.generate(), seq: part.seq.toLowerCase() }
-          }),
+          json: JSON.stringify(data),
           headers: {
             "Content-Type": "application/json"
           }
@@ -221,7 +219,19 @@ class PartExplorer extends React.Component {
       const err = JSON.stringify(result.body);
       throw new Error(`Lambda annotations failed. Server response: ${err}`);
     }
+    return result;
+  };
 
+  lambdaAnnotate = async part => {
+    const result = await this.lambdaPost("gibson", {
+      fragments: [
+        {
+          id: shortid.generate(),
+          seq: part.seq.toLowerCase()
+        }
+      ]
+    });
+    console.log(result.body);
     return result;
   };
 
