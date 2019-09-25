@@ -198,8 +198,7 @@ class PartExplorer extends React.Component {
     const result = await new Promise((resolve, reject) => {
       request.post(
         {
-          uri:
-            "https://u7a3t8zeo8.execute-api.us-east-1.amazonaws.com/prod/annotate",
+          uri: "https://microservices.latticeautomation.com/annotate",
           method: "POST",
           json: JSON.stringify({
             part: { id: shortid.generate(), seq: part.seq.toLowerCase() }
@@ -241,7 +240,7 @@ class PartExplorer extends React.Component {
       return error;
     }
 
-    let annotations = result.body.map(a => ({
+    let annotations = result.body.annotations.map(a => ({
       ...annotationFactory(part.name, a.name || a.start, colors),
       ...a
     }));
